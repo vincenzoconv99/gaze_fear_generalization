@@ -1,0 +1,61 @@
+expName	subject	pairs	block	trial	condition	rating	rt	correct	picName	timestamp
+Discrimination_LookAtMe	23	1	1	1	4	4	2.0180098242126405	True	stim\8 F080C + F101C.jpg	2019-01-04 16:59:05
+Discrimination_LookAtMe	23	1	1	2	2	1	1.7896682457067072	False	stim\2 M024C + M010C.jpg	2019-01-04 16:59:16
+Discrimination_LookAtMe	23	1	1	3	1	3	1.2651926246471703	False	stim\1 M024C.jpg	2019-01-04 16:59:26
+Discrimination_LookAtMe	23	1	1	4	3	3	1.0707007059827447	True	stim\7 F080C.jpg	2019-01-04 16:59:36
+Discrimination_LookAtMe	23	1	1	5	4	4	0.8276520613580942	True	stim\8 F080C + F101C.jpg	2019-01-04 16:59:46
+Discrimination_LookAtMe	23	1	1	6	1	3	1.3197368010878563	False	stim\1 M024C.jpg	2019-01-04 16:59:56
+Discrimination_LookAtMe	23	1	1	7	3	3	0.7600266574881971	True	stim\7 F080C.jpg	2019-01-04 17:00:06
+Discrimination_LookAtMe	23	1	1	8	2	1	0.8265114803798497	False	stim\2 M024C + M010C.jpg	2019-01-04 17:00:16
+Discrimination_LookAtMe	23	1	1	9	2	1	1.1323786224238575	False	stim\2 M024C + M010C.jpg	2019-01-04 17:00:26
+Discrimination_LookAtMe	23	1	1	10	3	3	0.7765581733547151	True	stim\7 F080C.jpg	2019-01-04 17:00:36
+Discrimination_LookAtMe	23	1	1	11	4	4	0.6464384784922004	True	stim\8 F080C + F101C.jpg	2019-01-04 17:00:46
+Discrimination_LookAtMe	23	1	1	12	1	2	1.188423642423004	False	stim\1 M024C.jpg	2019-01-04 17:00:56
+Discrimination_LookAtMe	23	1	1	13	1	2	0.581886874511838	False	stim\1 M024C.jpg	2019-01-04 17:01:06
+Discrimination_LookAtMe	23	1	1	14	4	4	0.7604932864196599	True	stim\8 F080C + F101C.jpg	2019-01-04 17:01:16
+Discrimination_LookAtMe	23	1	1	15	3	3	1.248571869917214	True	stim\7 F080C.jpg	2019-01-04 17:01:26
+Discrimination_LookAtMe	23	1	1	16	2	2	0.5492553170770407	True	stim\2 M024C + M010C.jpg	2019-01-04 17:01:36
+Discrimination_LookAtMe	23	1	1	17	4	4	0.711248786188662	True	stim\8 F080C + F101C.jpg	2019-01-04 17:01:46
+Discrimination_LookAtMe	23	1	1	18	3	3	0.9648814587853849	True	stim\7 F080C.jpg	2019-01-04 17:01:56
+Discrimination_LookAtMe	23	1	1	19	2	1	0.5516317281872034	False	stim\2 M024C + M010C.jpg	2019-01-04 17:02:05
+Discrimination_LookAtMe	23	1	1	20	1	1	0.6258419146761298	True	stim\1 M024C.jpg	2019-01-04 17:02:15
+Discrimination_LookAtMe	23	1	1	1	4	4	0.6962430528365076	True	stim\8 F080C + F101C.jpg	2019-01-04 17:03:17
+Discrimination_LookAtMe	23	1	1	2	1	2	0.9930231049656868	False	stim\1 M024C.jpg	2019-01-04 17:03:27
+Discrimination_LookAtMe	23	1	1	3	2	2	0.7827382241375744	True	stim\2 M024C + M010C.jpg	2019-01-04 17:03:37
+Discrimination_LookAtMe	23	1	1	4	3	3	1.0179683594033122	True	stim\7 F080C.jpg	2019-01-04 17:03:47
+Discrimination_LookAtMe	23	1	1	5	1	1	0.6119779646396637	True	stim\1 M024C.jpg	2019-01-04 17:03:57
+Discrimination_LookAtMe	23	1	1	6	2	2	0.8091969420202076	True	stim\2 M024C + M010C.jpg	2019-01-04 17:04:07
+Discrimination_LookAtMe	23	1	1	7	4	4	0.5815668748691678	True	stim\8 F080C + F101C.jpg	2019-01-04 17:04:16
+Discrimination_LookAtMe	23	1	1	8	3	3	0.935660227201879	True	stim\7 F080C.jpg	2019-01-04 17:04:26
+Discrimination_LookAtMe	23	1	1	9	2	2	0.555744250304997	True	stim\2 M024C + M010C.jpg	2019-01-04 17:04:36
+Discrimination_LookAtMe	23	1	1	10	4	4	0.5861132740974426	True	stim\8 F080C + F101C.jpg	2019-01-04 17:04:46
+Discrimination_LookAtMe	23	1	1	11	3	3	0.6695340443402529	True	stim\7 F080C.jpg	2019-01-04 17:04:55
+Discrimination_LookAtMe	23	1	1	12	1	2	0.4937622589059174	False	stim\1 M024C.jpg	2019-01-04 17:05:05
+Discrimination_LookAtMe	23	1	1	13	4	4	0.6470006564632058	True	stim\8 F080C + F101C.jpg	2019-01-04 17:05:15
+Discrimination_LookAtMe	23	1	1	14	3	3	0.9764708569273353	True	stim\7 F080C.jpg	2019-01-04 17:05:25
+Discrimination_LookAtMe	23	1	1	15	2	2	0.6263187597505748	True	stim\2 M024C + M010C.jpg	2019-01-04 17:05:35
+Discrimination_LookAtMe	23	1	1	16	1	1	0.5634092194959521	True	stim\1 M024C.jpg	2019-01-04 17:05:44
+Discrimination_LookAtMe	23	1	1	17	1	1	0.6144171734340489	True	stim\1 M024C.jpg	2019-01-04 17:05:54
+Discrimination_LookAtMe	23	1	1	18	3	3	0.9081300357356668	True	stim\7 F080C.jpg	2019-01-04 17:06:04
+Discrimination_LookAtMe	23	1	1	19	4	4	0.6402193666435778	True	stim\8 F080C + F101C.jpg	2019-01-04 17:06:14
+Discrimination_LookAtMe	23	1	1	20	2	1	0.7282646582461894	False	stim\2 M024C + M010C.jpg	2019-01-04 17:06:23
+Discrimination_LookAtMe	23	1	1	1	3	3	0.5685673747211695	True	stim\7 F080C.jpg	2019-01-04 17:07:43
+Discrimination_LookAtMe	23	1	1	2	2	2	0.791299793869257	True	stim\2 M024C + M010C.jpg	2019-01-04 17:07:53
+Discrimination_LookAtMe	23	1	1	3	4	4	0.8784442786127329	True	stim\8 F080C + F101C.jpg	2019-01-04 17:08:03
+Discrimination_LookAtMe	23	1	1	4	1	1	0.4633776107802987	True	stim\1 M024C.jpg	2019-01-04 17:08:12
+Discrimination_LookAtMe	23	1	1	5	1	2	2.4009569343179464	False	stim\1 M024C.jpg	2019-01-04 17:08:24
+Discrimination_LookAtMe	23	1	1	6	2	1	0.9529432160779834	False	stim\2 M024C + M010C.jpg	2019-01-04 17:08:34
+Discrimination_LookAtMe	23	1	1	7	3	3	0.4931078371591866	True	stim\7 F080C.jpg	2019-01-04 17:08:44
+Discrimination_LookAtMe	23	1	1	8	4	4	0.809827025514096	True	stim\8 F080C + F101C.jpg	2019-01-04 17:08:53
+Discrimination_LookAtMe	23	1	1	9	4	4	0.7158850263804197	True	stim\8 F080C + F101C.jpg	2019-01-04 17:09:03
+Discrimination_LookAtMe	23	1	1	10	3	3	1.0624636430293322	True	stim\7 F080C.jpg	2019-01-04 17:09:13
+Discrimination_LookAtMe	23	1	1	11	1	1	0.5036678276956081	True	stim\1 M024C.jpg	2019-01-04 17:09:23
+Discrimination_LookAtMe	23	1	1	12	2	2	0.7102959980256855	True	stim\2 M024C + M010C.jpg	2019-01-04 17:09:33
+Discrimination_LookAtMe	23	1	1	13	2	2	0.6956132696941495	True	stim\2 M024C + M010C.jpg	2019-01-04 17:09:42
+Discrimination_LookAtMe	23	1	1	14	4	4	0.7259450359269977	True	stim\8 F080C + F101C.jpg	2019-01-04 17:09:52
+Discrimination_LookAtMe	23	1	1	15	1	1	0.5391280022449791	True	stim\1 M024C.jpg	2019-01-04 17:10:02
+Discrimination_LookAtMe	23	1	1	16	3	3	0.8335211263038218	True	stim\7 F080C.jpg	2019-01-04 17:10:12
+Discrimination_LookAtMe	23	1	1	17	3	3	0.7204795009456575	True	stim\7 F080C.jpg	2019-01-04 17:10:22
+Discrimination_LookAtMe	23	1	1	18	1	1	0.8696059766225517	True	stim\1 M024C.jpg	2019-01-04 17:10:31
+Discrimination_LookAtMe	23	1	1	19	2	2	0.7065635696053505	True	stim\2 M024C + M010C.jpg	2019-01-04 17:10:41
+Discrimination_LookAtMe	23	1	1	20	4	4	1.5146499774418771	True	stim\8 F080C + F101C.jpg	2019-01-04 17:10:52
