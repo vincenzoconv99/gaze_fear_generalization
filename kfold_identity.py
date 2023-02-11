@@ -7,7 +7,7 @@ from my_utils.loader import load_event_features
 from sklearn.preprocessing import label_binarize, StandardScaler, LabelEncoder, RobustScaler
 from sklearn.model_selection import train_test_split, GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import make_pipeline
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, plot_confusion_matrix,  roc_auc_score, average_precision_score
+from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score, roc_auc_score, average_precision_score
 import numpy_indexed as npi
 from sklearn.svm import SVC
 
@@ -21,6 +21,10 @@ from sklearn.kernel_approximation import Nystroem
 import pandas as pd
 import re
 from my_utils.plotter import build_roc_curve
+import seaborn as sns
+
+import matplotlib.pyplot as plt
+from itertools import cycle
 
 def sorted_nicely(l):
     convert = lambda text: int(text) if text.isdigit() else text
@@ -28,7 +32,7 @@ def sorted_nicely(l):
     return sorted(l, key = alphanum_key)
 
 
-def train_sklearn(X, y, model, hyper_search=False):
+def train_sklearn(X, y, model):
     from sklearn.metrics import make_scorer, f1_score
     scorer = make_scorer(f1_score, average='macro')
 
@@ -36,12 +40,6 @@ def train_sklearn(X, y, model, hyper_search=False):
 
     pipe_clf = make_pipeline(RobustScaler(),
                              clone(model)
-                             #AdaBoostClassifier(n_estimators=300, learning_rate=0.001)
-                             #RandomForestClassifier(n_estimators=10, min_samples_split=10)
-                             #MLPClassifier(hidden_layer_sizes=(300, 200, 75, 50), max_iter=1000)
-                             #Nystroem(gamma=0.002, n_components=1000, kernel='rbf', n_jobs=-1),
-                             #LinearSVC(C=1000., max_iter=5000, dual=False)
-                             #SVC(random_state=1, C=1000, gamma=0.002, kernel='rbf')
                             )
     distributions = dict(svc__C=scipy.stats.expon(scale=1000), svc__gamma=scipy.stats.expon(scale=.1))
         
@@ -54,7 +52,7 @@ def train_sklearn(X, y, model, hyper_search=False):
     return pipe_clf
 
 
-def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_s_test, stim_s_test):
+def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_s_test, stim_s_test, fold):
     
     metrics_classification = {}
 
@@ -63,40 +61,37 @@ def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_
     for i in range(len(y_f_test)):
         ss[i] = str(int(y_f_test[i])) + '-' + str(int(stim_f_test[i]))
 
-    if isinstance(clf_fix, type(SVC()) ):
-        ppred_fix = clf_fix.predict_proba(X_fix_test)
-        #ppred_fix = clf_fix.decision_function(X_fix_test)
-    else:
-        ppred_fix = clf_fix.predict_proba(X_fix_test)
+    ppred_fix = clf_fix.predict_proba(X_fix_test)
 
     key, ppred_fix_comb = npi.group_by(ss).mean(ppred_fix)
 
     y_test = np.zeros(key.shape)
+    d = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 10: 8, 11: 9, 12: 10, 13: 11, 14: 12, 15: 13, 16: 14, 17: 15, 18: 16, 19: 17, 20: 18, 21: 19, 22: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: 26, 29: 27, 30: 28, 31: 29, 32: 30, 33: 31, 41: 32, 42: 33, 43: 34, 44: 35, 45: 36, 46: 37, 47: 38, 48: 39, 49: 40, 50: 41, 51: 42, 52: 43, 53: 44, 54: 45, 55: 46}
     for i,k in enumerate(key):
         l = int(k.split('-')[0])
-        y_test[i] = l
-    
+        y_test[i] = d[l]
+
     #Saccades -------
     ss = np.zeros_like(y_s_test).astype('str')
 
     for i in range(len(y_s_test)):
         ss[i] = str(int(y_s_test[i])) + '-' + str(int(stim_s_test[i]))
-    if isinstance(clf_sac, type(SVC()) ):
-        ppred_sac = clf_sac.predict_proba(X_sac_test)
-        #ppred_sac = clf_sac.decision_function(X_sac_test)
-    else:
-        ppred_sac = clf_sac.predict_proba(X_sac_test)
+    
+    ppred_sac = clf_sac.predict_proba(X_sac_test)
     
     #Fusion --------
     _, ppred_sac_comb = npi.group_by(ss).mean(ppred_sac)
     ppred = np.asarray((np.matrix(ppred_fix_comb) + np.matrix(ppred_sac_comb)) / 2.)
     y_pred = np.squeeze(np.asarray(ppred.argmax(axis=1)))
-    y_test_bin = label_binarize(y_test, classes=np.unique(y_test))
+    y_test_bin = label_binarize(y_test, classes= np.unique(y_test) )
 
-    f1 = f1_score(y_test, y_pred, average='weighted')
+
+    f1 = f1_score(np.array(y_test).astype(int), y_pred, average='weighted')
     accuracy = accuracy_score(y_test, y_pred)
-    auroc = roc_auc_score(y_test_bin, ppred )
-    auprc = average_precision_score(y_test_bin, ppred)
+    auroc = roc_auc_score(y_test_bin, ppred, average='weighted')
+    auprc = average_precision_score(y_test_bin, ppred, average='weighted')
+    cm = confusion_matrix(y_test, y_pred)
+
     
     print('Classification Evaluation')
     print('\t F1-score test', f1)
@@ -104,12 +99,15 @@ def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_
     print('\t AUROC test', auroc)
     print('\t AUPRC test', auprc)
 
+
     metrics_classification['f1'] = f1
     metrics_classification['accuracy'] = accuracy
     metrics_classification['auroc'] = auroc
     metrics_classification['auprc'] = auprc
+    metrics_classification['cm'] = cm
 
     return metrics_classification
+
 
 def load_dataset(path, nsub=None, num_sessions=None):
     global_data_fix = []
@@ -151,7 +149,7 @@ def get_CV_splits(stim_f, yf, k):
         subs_splits.append(kf.split(curr_stims))
     return subs_splits, sub_labels
 
-def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model, hyper_search=False):
+def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model):
     sub_splits_gen, sub_labels = get_CV_splits(stim_f, yf, k=k)
 
     sub_splits = {}
@@ -212,12 +210,12 @@ def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model, hyper_sear
         test_sts = np.concatenate(test_sts)
 
         print('\nTraining Fixations')
-        clf_fix = train_sklearn(train_Xf, train_yf, model=model, hyper_search=hyper_search)
+        clf_fix = train_sklearn(train_Xf, train_yf, model=model)
         print('Training Saccades')
-        clf_sac = train_sklearn(train_Xs, train_ys, model=model, hyper_search=hyper_search)
+        clf_sac = train_sklearn(train_Xs, train_ys, model=model)
 
         current_fold_metrics = evaluate(clf_fix, clf_sac, test_Xf, test_yf, test_stf, test_Xs, 
-                                        test_ys, test_sts)
+                                        test_ys, test_sts, str(fold+1))
         cv_metrics.append(current_fold_metrics)
 
 
@@ -225,6 +223,14 @@ def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model, hyper_sear
     accuracies = [fold['accuracy'] for fold in cv_metrics]
     aurocs = [fold['auroc'] for fold in cv_metrics]
     auprcs = [fold['auprc'] for fold in cv_metrics]
+    cms = [fold['cm'] for fold in cv_metrics]
+
+    accumulator = cms[0]
+    for i in range(1, len(cms)):
+        accumulator += np.array(cms[i])
+
+    sns.heatmap(accumulator, annot=False, fmt='.2%', cmap='Blues')
+    plt.savefig('./images/identity_cm_' + str(model) + '.png')
 
     return {'f1_score_mean': np.mean(f1s),'f1_score_std': np.std(f1s), 'accuracy_mean': np.mean(accuracies),
             'accuracy_std': np.std(accuracies), 'auroc_mean': np.mean(aurocs), 'auroc_std': np.std(aurocs),
@@ -236,9 +242,9 @@ def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model, hyper_sear
 
 dataset_name = 'Reutter_OU_posterior_VI'
 
-models_classification = [ #RandomForestClassifier(n_estimators=1, min_samples_split=10), 
-                          #MLPClassifier(hidden_layer_sizes=(300, 200, 75, 50), max_iter=5),
-                          SVC(random_state=1, C=1000, gamma=0.002, kernel='linear', max_iter=1, probability=True) ]
+models_classification = [ SVC(random_state=1, C=1000, gamma=0.002, kernel='rbf', probability=True),
+                          RandomForestClassifier(min_samples_split=10),
+                          MLPClassifier(hidden_layer_sizes=(100, 75, 50)) ]
 
 print('\nReutter Dataset (OU features)...\n')
 directory = join(join('features', dataset_name), 'train')
@@ -273,8 +279,7 @@ print('\n-------------------------------')
 
 for model in models_classification:
 
-    cv_summary = get_results_kfold( X_fix, yf, stim_f, X_sac, ys, stim_s, k=5, 
-                                    model=model, hyper_search=False)
+    cv_summary = get_results_kfold( X_fix, yf, stim_f, X_sac, ys, stim_s, k=5, model=model)
 
     print('\nF1 CV score: ' + str(cv_summary['f1_score_mean']) + ' +- ' + str(cv_summary['f1_score_std']))
     print('Accuracy CV score: ' + str(cv_summary['accuracy_mean']) + ' +- ' + str(cv_summary['accuracy_std']))

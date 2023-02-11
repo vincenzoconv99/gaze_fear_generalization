@@ -29,7 +29,7 @@ def sorted_nicely(l):
     return sorted(l, key = alphanum_key)
 
 
-def train_sklearn(X, y, model, hyper_search=True):
+def train_sklearn(X, y, model):
     from sklearn.metrics import make_scorer
     
     print('Classification using ', model )
@@ -172,7 +172,7 @@ def get_CV_splits(stim_f, ids_f, k):
         subs_splits.append(kf.split(curr_stims))
     return subs_splits, sub_ids
 
-def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, model='SVM', hyper_search=True):
+def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, model):
     sub_splits_gen, sub_ids = get_CV_splits(stim_f, ids_f, k=k)
     
     sub_splits = {}
@@ -256,10 +256,10 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
         test_ids_s = np.concatenate(test_ids_s)
 
         print('\nTraining Fixations')
-        clf_fix = train_sklearn(train_Xf, train_yf, model=model, hyper_search=hyper_search)
+        clf_fix = train_sklearn(train_Xf, train_yf, model=model)
         
         print('Training Saccades')
-        clf_sac = train_sklearn(train_Xs, train_ys, model=model, hyper_search=hyper_search)
+        clf_sac = train_sklearn(train_Xs, train_ys, model=model)
 
         current_fold_metrics = evaluate( clf_fix, clf_sac, 
                                          test_Xf, test_yf, test_stf, test_ids_f, 
@@ -319,7 +319,7 @@ print('\n-------------------------------')
 
 for model in models_classification:
 
-    cv_summary = get_results_kfold( X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k=5, model=model, hyper_search=False)
+    cv_summary = get_results_kfold( X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k=5, model=model)
 
     print('\nF1 CV score: ' + str(cv_summary['f1_score_mean']) + ' +- ' + str(cv_summary['f1_score_std']))
     print('Accuracy CV score: ' + str(cv_summary['accuracy_mean']) + ' +- ' + str(cv_summary['accuracy_std']))

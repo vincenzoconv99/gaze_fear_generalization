@@ -7,3 +7,5 @@ scikit-learn
 scipy
 numpy-indexed=0.3.5
 imbalanced-learn=0.10.1
+openpyxl
+seaborn

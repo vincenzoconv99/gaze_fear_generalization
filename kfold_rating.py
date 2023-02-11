@@ -27,7 +27,7 @@ def sorted_nicely(l):
     return sorted(l, key = alphanum_key)
 
 
-def train_sklearn(X, y, model, hyper_search=True, regression=True):
+def train_sklearn(X, y, model, regression=True):
     from sklearn.metrics import make_scorer
 
     if regression:
@@ -35,8 +35,6 @@ def train_sklearn(X, y, model, hyper_search=True, regression=True):
         scorer = make_scorer(r2_score)
         pipe_reg = make_pipeline(RobustScaler(),
                                  clone(model)
-                                 #Nystroem(gamma=0.002, n_components=2500, kernel='rbf', n_jobs=-1),
-                                 #LinearSVR(C=1000., max_iter=1000, dual=False, loss='squared_epsilon_insensitive')
                                  )
         distributions = dict(linearsvr__C=scipy.stats.expon(scale=1000), nystroem__gamma=scipy.stats.expon(scale=.1),
                              nystroem__n_components=scipy.stats.randint(100 ,1000))
@@ -228,7 +226,7 @@ def get_CV_splits(stim_f, ids_f, k):
         subs_splits.append(kf.split(curr_stims))
     return subs_splits, sub_ids
 
-def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, model, hyper_search=False, regression=True):
+def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, model, regression=True):
     sub_splits_gen, sub_ids = get_CV_splits(stim_f, ids_f, k=k)
     
     sub_splits = {}
@@ -312,10 +310,10 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
         test_ids_s = np.concatenate(test_ids_s)
 
         print('\nTraining Fixations')
-        clf_fix = train_sklearn(train_Xf, train_yf, model=model, hyper_search=hyper_search, regression=regression)
+        clf_fix = train_sklearn(train_Xf, train_yf, model=model, regression=regression)
         
         print('Training Saccades')
-        clf_sac = train_sklearn(train_Xs, train_ys, model=model, hyper_search=hyper_search, regression=regression)
+        clf_sac = train_sklearn(train_Xs, train_ys, model=model, regression=regression)
 
         current_fold_metrics = evaluate( clf_fix, clf_sac,
                                          test_Xf, test_yf, test_stf, test_ids_f,
@@ -388,7 +386,7 @@ for regression, models in  [ (False, models_classification) , (True, models_regr
 
         cv_summary = get_results_kfold( X_fix, ids_f, yf, stim_f, X_sac, 
                                         ids_s, ys, stim_s, k=5, model=model, 
-                                        hyper_search=False, regression=regression)
+                                        regression=regression)
         if regression:
             print('\nRMSE CV score: ' + str(cv_summary['rmse_mean']) + ' +- ' + str(cv_summary['rmse_std']))
             print('MAE CV score: ' + str(cv_summary['mae_mean']) + ' +- ' + str(cv_summary['mae_std']))
