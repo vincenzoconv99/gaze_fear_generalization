@@ -280,7 +280,7 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
 # MAIN ---------------------------------------------------------------------
 
 dataset_name = 'Reutter_OU_posterior_VI'
-models_classification = [ BalancedRandomForestClassifier(), RUSBoostClassifier() ]
+models_classification = [ BalancedRandomForestClassifier(), RUSBoostClassifier(n_estimators=100) ]
 
 print('\nReutter Dataset (OU features)...\n')
 directory = join(join('features', dataset_name), 'train')

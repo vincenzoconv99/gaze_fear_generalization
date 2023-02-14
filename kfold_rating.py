@@ -36,9 +36,6 @@ def train_sklearn(X, y, model, regression=True):
         pipe_reg = make_pipeline(RobustScaler(),
                                  clone(model)
                                  )
-        distributions = dict(linearsvr__C=scipy.stats.expon(scale=1000), nystroem__gamma=scipy.stats.expon(scale=.1),
-                             nystroem__n_components=scipy.stats.randint(100 ,1000))
-            
         
         pipe_reg = pipe_reg.fit(X, y)
         y_pred = pipe_reg.predict(X)
@@ -172,6 +169,9 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
 
         subject_id = int(file.split("_")[2].split(".")[0])
         behavior_info = pd.read_csv(behavior_path + '{0:03d}'.format(subject_id) + '.csv', sep='\t')
+
+        print(behavior_info)
+        return
 
         rating_list = list(behavior_info['rating']) #it contains the corresponding rating per trial
         

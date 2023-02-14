@@ -44,7 +44,6 @@ def load_event_features(file):
 def load_reutter(path):
     scanpath = []
     paths = listdir(path)
-    paths.remove('Questionnaires.xlsx')
 
     for subject in paths:
         sub_scan = load_reutter_sub(path + subject)

@@ -41,8 +41,7 @@ def train_sklearn(X, y, model):
     pipe_clf = make_pipeline(RobustScaler(),
                              clone(model)
                             )
-    distributions = dict(svc__C=scipy.stats.expon(scale=1000), svc__gamma=scipy.stats.expon(scale=.1))
-        
+    
     pipe_clf = pipe_clf.fit(X, y)
     y_pred = pipe_clf.predict(X)
     f1 = f1_score(y, y_pred, average='weighted')

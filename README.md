@@ -1,6 +1,6 @@
 # Using ML on Gaze Data in a Fear Generalization setup
 
-The system performs 1) Social anxiety recognition; 2) Identification of the subjects; 3) Eletroctactile stimulus recognition and 4) Pain rating prediction; based on eye movements modeled as an Ornstein-Uhlenbeck process.
+The system performs 1) social anxiety recognition; 2) identification of the subjects; 3) eletroctactile stimulus recognition and 4) shock expectancy rating prediction; based on eye movements modeled as an Ornstein-Uhlenbeck process.
 
 ## Installation
 

@@ -33,16 +33,11 @@ def train_sklearn(X, y, model, regression=True):
     if regression:
         print('Regression using ', model ) 
         scorer = make_scorer(r2_score)
-        pipe_reg = make_pipeline(RobustScaler(),
-                                 clone(model)
-                                 #Nystroem(gamma=0.002, n_components=2500, kernel='rbf', n_jobs=-1),
-                                 #LinearSVR(C=1000., max_iter=1000, dual=False, loss='squared_epsilon_insensitive')
-                                 )
-        distributions = dict(linearsvr__C=scipy.stats.expon(scale=1000), nystroem__gamma=scipy.stats.expon(scale=.1),
-                             nystroem__n_components=scipy.stats.randint(100 ,1000))
+        pipe_reg = make_pipeline( RobustScaler(),
+                                  clone(model)
+                                )
 
         pipe_reg = pipe_reg.fit(X, y)
-        #score = pipe_reg.score(X, y)
         y_pred = pipe_reg.predict(X)
         mse = mean_squared_error(y, y_pred, squared=False)
         mae = mean_absolute_error(y, y_pred)
@@ -57,12 +52,9 @@ def train_sklearn(X, y, model, regression=True):
         scorer = make_scorer(f1_score)
         pipe_clf = make_pipeline(RobustScaler(),
                                  clone(model)
-                                 #BalancedRandomForestClassifier()
-                                 #MLPClassifier(hidden_layer_sizes=(200, 100, 100, 100, 100, 25), max_iter=5000)
                                 )
 
         pipe_clf = pipe_clf.fit(X, y)
-        #score = pipe_clf.score(X, y)
         y_pred = pipe_clf.predict(X)
         f1 = f1_score(y, y_pred)
         acc = accuracy_score(y, y_pred)
@@ -168,9 +160,12 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
     sias_df['score'] = sias_score
     sias_df['anxiety'] = sias_score >= 30
     sias_df = sias_df[['VP', 'score', 'anxiety']]
-
-    map_sias = { x[1]['VP'] : x[1]['score']  for x in sias_df.iterrows() }
+    
+    # Mapping subject ids to their label   
+    map_sias = { x[1]['VP'] : x[1]['score']  for x in sias_df.iterrows() } 
     map_is_anxious = { x[1]['VP'] : x[1]['anxiety']  for x in sias_df.iterrows() }
+
+    print(map_is_anxious)
 
     if nsub is not None:
         subs = subs[:nsub]
@@ -338,10 +333,9 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
 # MAIN ---------------------------------------------------------------------
 
 dataset_name = 'Reutter_OU_posterior_VI'
-models_regression = [ RandomForestRegressor(n_estimators = 1), SVR(kernel='linear', max_iter = 1), MLPRegressor(hidden_layer_sizes=(100, 50, 25), max_iter=5)]
-models_classification = [ BalancedRandomForestClassifier(), RUSBoostClassifier(n_estimators=300) ]
+models_regression = [ SVR( C=1000, kernel='rbf', gamma=0.002), RandomForestRegressor(), MLPRegressor(hidden_layer_sizes=(100, 50, 25))]
+models_classification = [ BalancedRandomForestClassifier(), RUSBoostClassifier(n_estimators=50) ]
 
-print('\nReutter Dataset (OU features)...\n')
 directory = join(join('features', dataset_name), 'train')
 
 
@@ -357,11 +351,11 @@ for regression, models in  [ (False, models_classification), (True, models_regre
     ids_f = data_fix[:, 0]
 
     yf = data_fix[:, 1]
-    stim_f = data_fix[:, 2] # ids degli stimoli delle fissazioni
+    stim_f = data_fix[:, 2] # ids of fixations' stimuli
     X_sac = data_sac[:, 3:]
     ids_s = data_sac[:, 0]
     ys = data_sac[:, 1]
-    stim_s = data_sac[:, 2] # ids degli stimoli delle saccadi
+    stim_s = data_sac[:, 2] # ids of saccades' stimuli
 
 
     n_sub_f = len(np.unique(ids_f))
