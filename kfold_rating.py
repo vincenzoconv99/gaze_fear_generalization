@@ -170,9 +170,6 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
         subject_id = int(file.split("_")[2].split(".")[0])
         behavior_info = pd.read_csv(behavior_path + '{0:03d}'.format(subject_id) + '.csv', sep='\t')
 
-        print(behavior_info)
-        return
-
         rating_list = list(behavior_info['rating']) #it contains the corresponding rating per trial
         
         fix_rating_labels = None
@@ -365,6 +362,7 @@ for regression, models in  [ (False, models_classification) , (True, models_regr
     ys = data_sac[:, 1]
     stim_s = data_sac[:, 2] # ids degli stimoli delle saccadi
 
+    print('std yf', np.std(list(yf) + list(ys)) )
 
     n_sub_f = len(np.unique(ids_f))
     n_sub_s = len(np.unique(ids_s))

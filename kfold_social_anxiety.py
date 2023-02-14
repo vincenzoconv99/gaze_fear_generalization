@@ -165,7 +165,6 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
     map_sias = { x[1]['VP'] : x[1]['score']  for x in sias_df.iterrows() } 
     map_is_anxious = { x[1]['VP'] : x[1]['anxiety']  for x in sias_df.iterrows() }
 
-    print(map_is_anxious)
 
     if nsub is not None:
         subs = subs[:nsub]
@@ -302,6 +301,7 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
         test_ids_s = np.concatenate(test_ids_s)
 
 
+
         print('\nTraining Fixations')
         clf_fix = train_sklearn(train_Xf, train_yf, model=model, regression=regression)
         
@@ -339,7 +339,7 @@ models_classification = [ BalancedRandomForestClassifier(), RUSBoostClassifier(n
 directory = join(join('features', dataset_name), 'train')
 
 
-for regression, models in  [ (False, models_classification), (True, models_regression) ]:
+for regression, models in  [ (True, models_regression), (False, models_classification) ]:
 
     data_fix, data_sac = load_dataset(directory, regression = regression)
 
@@ -356,7 +356,6 @@ for regression, models in  [ (False, models_classification), (True, models_regre
     ids_s = data_sac[:, 0]
     ys = data_sac[:, 1]
     stim_s = data_sac[:, 2] # ids of saccades' stimuli
-
 
     n_sub_f = len(np.unique(ids_f))
     n_sub_s = len(np.unique(ids_s))
