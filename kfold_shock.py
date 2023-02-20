@@ -37,13 +37,6 @@ def train_sklearn(X, y, model):
     scorer = make_scorer(f1_score)
     pipe_clf = make_pipeline(RobustScaler(),
                              clone(model)
-                             #BalancedRandomForestClassifier()
-                             #RUSBoostClassifier(n_estimators = 100, learning_rate=0.001)
-                             #RandomForestClassifier(n_estimators = 100, min_samples_split=1000)
-                             #Nystroem(gamma=0.002, n_components=1000, kernel='rbf', n_jobs=-1),
-                             #LinearSVC(C=1000., max_iter=1000, dual=False)
-                             #MLPClassifier(hidden_layer_sizes=(200, 100, 50, 25), max_iter=1000)
-                             #SVC(random_state=1, C=1000, gamma=0.002, kernel='rbf')
                             )
 
     pipe_clf = pipe_clf.fit(X, y)

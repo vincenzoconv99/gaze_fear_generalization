@@ -357,6 +357,8 @@ for regression, models in  [ (True, models_regression), (False, models_classific
     ys = data_sac[:, 1]
     stim_s = data_sac[:, 2] # ids of saccades' stimuli
 
+    print('Standard Deviation of labels', np.std(list(yf) + list(ys)) )
+
     n_sub_f = len(np.unique(ids_f))
     n_sub_s = len(np.unique(ids_s))
     assert n_sub_f == n_sub_s

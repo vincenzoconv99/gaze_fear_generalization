@@ -53,10 +53,6 @@ def train_sklearn(X, y, model, regression=True):
         scorer = make_scorer(f1_score)
         pipe_clf = make_pipeline(RobustScaler(),
                                  clone(model)
-                                 #BalancedRandomForestClassifier(min_samples_split=100)
-                                 #Nystroem(gamma=0.002, n_components=2500, kernel='rbf', n_jobs=-1),
-                                 #LinearSVC(C=1000., max_iter=1000, dual=False)
-                                 #MLPClassifier(hidden_layer_sizes=(200, 100, 25), max_iter=1000)
                                 )
 
         pipe_clf = pipe_clf.fit(X, y)
@@ -338,13 +334,13 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
 # MAIN ---------------------------------------------------------------------
 
 dataset_name = 'Reutter_OU_posterior_VI'
-models_regression = [ RandomForestRegressor(n_estimators = 1), SVR(kernel='linear', max_iter = 1), MLPRegressor(hidden_layer_sizes=(100, 50, 25), max_iter=5)]
+models_regression = [ SVR(kernel='rbf', gamma=0.002, C=1000), RandomForestRegressor(), MLPRegressor(hidden_layer_sizes=(100, 50, 25))]
 models_classification = [ BalancedRandomForestClassifier(min_samples_split=100), RUSBoostClassifier() ]
 
 print('\nReutter Dataset (OU features)...\n')
 directory = join(join('features', dataset_name), 'train')
 
-for regression, models in  [ (False, models_classification) , (True, models_regression), ]:
+for regression, models in  [ (True, models_regression), (False, models_classification) ]:
 
     data_fix, data_sac = load_dataset(directory, regression = regression)
 
@@ -362,7 +358,7 @@ for regression, models in  [ (False, models_classification) , (True, models_regr
     ys = data_sac[:, 1]
     stim_s = data_sac[:, 2] # ids degli stimoli delle saccadi
 
-    print('std yf', np.std(list(yf) + list(ys)) )
+    print('Standard Deviation of labels', np.std(list(yf) + list(ys)) )
 
     n_sub_f = len(np.unique(ids_f))
     n_sub_s = len(np.unique(ids_s))
