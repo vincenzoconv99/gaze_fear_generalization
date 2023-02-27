@@ -5,6 +5,7 @@ from os import listdir, remove
 from zipfile import ZipFile
 import pandas as pd
 from my_utils.gaze import dva2pixels
+import re
 
 def sorted_nicely(l):
     convert = lambda text: int(text) if text.isdigit() else text
