@@ -39,7 +39,7 @@ def train_sklearn(X, y, model):
     print('Classification using ', model )
 
     pipe_clf = make_pipeline(RobustScaler(),
-                             clone(model)
+                             clone(model) #Creating a new sklearn model with the same parameters of the given one
                             )
     
     pipe_clf = pipe_clf.fit(X, y)
@@ -64,11 +64,11 @@ def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_
 
     key, ppred_fix_comb = npi.group_by(ss).mean(ppred_fix)
 
-    y_test = np.zeros(key.shape)
+    y_test = np.zeros(key.shape) # Mapping orginal subject ids to sequetial identifiers for sklearn compatibility
     d = {1: 0, 2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 6, 8: 7, 10: 8, 11: 9, 12: 10, 13: 11, 14: 12, 15: 13, 16: 14, 17: 15, 18: 16, 19: 17, 20: 18, 21: 19, 22: 20, 23: 21, 24: 22, 25: 23, 26: 24, 27: 25, 28: 26, 29: 27, 30: 28, 31: 29, 32: 30, 33: 31, 41: 32, 42: 33, 43: 34, 44: 35, 45: 36, 46: 37, 47: 38, 48: 39, 49: 40, 50: 41, 51: 42, 52: 43, 53: 44, 54: 45, 55: 46}
     for i,k in enumerate(key):
         l = int(k.split('-')[0])
-        y_test[i] = d[l]
+        y_test[i] = d[l]s
 
     #Saccades -------
     ss = np.zeros_like(y_s_test).astype('str')
@@ -84,7 +84,7 @@ def evaluate(clf_fix, clf_sac, X_fix_test, y_f_test, stim_f_test, X_sac_test, y_
     y_pred = np.squeeze(np.asarray(ppred.argmax(axis=1)))
     y_test_bin = label_binarize(y_test, classes= np.unique(y_test) )
 
-
+    #Computing Metrics
     f1 = f1_score(np.array(y_test).astype(int), y_pred, average='weighted')
     accuracy = accuracy_score(y_test, y_pred)
     auroc = roc_auc_score(y_test_bin, ppred, average='weighted')
@@ -228,9 +228,11 @@ def get_results_kfold(X_fix, yf, stim_f, X_sac, ys, stim_s, k, model):
     for i in range(1, len(cms)):
         accumulator += np.array(cms[i])
 
+    #Saving global onfusion matrix of the model
     sns.heatmap(accumulator, annot=False, fmt='.2%', cmap='Blues')
-    plt.savefig('./images/identity_cm_' + str(model) + '.png')
+    plt.savefig('./images/identity_cm_' + str(model) + '.png') 
 
+    #Returning means and stds of the metrics
     return {'f1_score_mean': np.mean(f1s),'f1_score_std': np.std(f1s), 'accuracy_mean': np.mean(accuracies),
             'accuracy_std': np.std(accuracies), 'auroc_mean': np.mean(aurocs), 'auroc_std': np.std(aurocs),
             'auprc_mean': np.mean(auprcs), 'auprc_std': np.std(auprcs)}
@@ -251,11 +253,11 @@ data_fix, data_sac = load_dataset(directory)
 
 
 X_fix = data_fix[:, 2:]
-yf = data_fix[:, 0]
-stim_f = data_fix[:, 1] # ids degli stimoli delle fissazioni
+yf = data_fix[:, 0] # Subjects' ids (fixations)
+stim_f = data_fix[:, 1] # Stimulus' ids (fixations)
 X_sac = data_sac[:, 2:]
-ys = data_sac[:, 0]
-stim_s = data_sac[:, 1] # ids degli stimoli delle saccadi
+ys = data_sac[:, 0] # Subjects' ids (saccades)
+stim_s = data_sac[:, 1] # Stimulus' ids (saccades)
 
 
 n_class_f = len(np.unique(yf))

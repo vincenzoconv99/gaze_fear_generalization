@@ -36,7 +36,7 @@ def train_sklearn(X, y, model):
 
     scorer = make_scorer(f1_score)
     pipe_clf = make_pipeline(RobustScaler(),
-                             clone(model)
+                             clone(model) #Creating a new sklearn model with the same parameters of the given one
                             )
 
     pipe_clf = pipe_clf.fit(X, y)
@@ -265,6 +265,7 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
     aurocs = [fold['auroc'] for fold in cv_metrics]
     auprcs = [fold['auprc'] for fold in cv_metrics]
 
+    #Returning means and stds of the metrics
     return {'f1_score_mean': np.mean(f1s),'f1_score_std': np.std(f1s), 'accuracy_mean': np.mean(accuracies),
             'accuracy_std': np.std(accuracies), 'auroc_mean': np.mean(aurocs), 'auroc_std': np.std(aurocs),
             'auprc_mean': np.mean(auprcs), 'auprc_std': np.std(auprcs)}
@@ -285,13 +286,14 @@ for x in data_fix[:, :3]:
     map_ss_shock[(int(x[0]), int(x[2]))] = x[1]
 
 X_fix = data_fix[:, 3:]
-ids_f = data_fix[:, 0] # ids dei soggetti (fissazioni)
-yf = data_fix[:, 1]
-stim_f = data_fix[:, 2] # ids degli stimoli delle fissazioni
+ids_f = data_fix[:, 0] # Subjects' ids (fixations)
+yf = data_fix[:, 1] # Labels (fixations)
+stim_f = data_fix[:, 2] # Stimulus' ids (fixations)
+
 X_sac = data_sac[:, 3:]
-ids_s = data_sac[:, 0] # ids dei soggetti (saccadi)
-ys = data_sac[:, 1]
-stim_s = data_sac[:, 2] # ids degli stimoli delle saccadi
+ids_s = data_sac[:, 0] # Subjects' ids (saccades)
+ys = data_sac[:, 1] # Labels (saccades)
+stim_s = data_sac[:, 2] # Stimulus' ids (saccades)
 
 
 n_sub_f = len(np.unique(ids_f))

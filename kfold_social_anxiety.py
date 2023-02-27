@@ -314,6 +314,7 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
 
         cv_metrics.append(current_fold_metrics)
 
+    #Returning means and stds of the metrics
     if regression:
         rmses = [fold['rmse'] for fold in cv_metrics]
         maes = [fold['mae'] for fold in cv_metrics]
@@ -348,14 +349,14 @@ for regression, models in  [ (True, models_regression), (False, models_classific
         map_ss_sias[(int(x[0]), int(x[2]))] = x[1]
 
     X_fix = data_fix[:, 3:]
-    ids_f = data_fix[:, 0]
-
-    yf = data_fix[:, 1]
-    stim_f = data_fix[:, 2] # ids of fixations' stimuli
+    ids_f = data_fix[:, 0] # Subjects' ids (fixations)
+    yf = data_fix[:, 1] # Labels (fixations)
+    stim_f = data_fix[:, 2]  # Stimulus' ids (fixations)
+    
     X_sac = data_sac[:, 3:]
-    ids_s = data_sac[:, 0]
-    ys = data_sac[:, 1]
-    stim_s = data_sac[:, 2] # ids of saccades' stimuli
+    ids_s = data_sac[:, 0] # Subjects' ids (saccades)
+    ys = data_sac[:, 1] # Labels (saccades)
+    stim_s = data_sac[:, 2] # Stimulus' ids (saccades)
 
     print('Standard Deviation of labels', np.std(list(yf) + list(ys)) )
 

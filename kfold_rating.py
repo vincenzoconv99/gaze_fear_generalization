@@ -34,7 +34,7 @@ def train_sklearn(X, y, model, regression=True):
         print('Regression using ', model ) 
         scorer = make_scorer(r2_score)
         pipe_reg = make_pipeline(RobustScaler(),
-                                 clone(model)
+                                 clone(model) #Creating a new sklearn model with the same parameters of the given one
                                  )
         
         pipe_reg = pipe_reg.fit(X, y)
@@ -166,7 +166,7 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
         subject_id = int(file.split("_")[2].split(".")[0])
         behavior_info = pd.read_csv(behavior_path + '{0:03d}'.format(subject_id) + '.csv', sep='\t')
 
-        rating_list = list(behavior_info['rating']) #it contains the corresponding rating per trial
+        rating_list = list(behavior_info['rating']) #it contains the corresponding Shock expectancy rating per trial
         
         fix_rating_labels = None
         sac_rating_labels = None
@@ -175,7 +175,8 @@ def load_dataset(path, regression=True, nsub=None, num_sessions=None):
             fix_rating_labels = np.array([ [ rating_list[x[0]] ] for x in stim_fix])
             sac_rating_labels = np.array([ [ rating_list[x[0]] ] for x in stim_sac])
         else:
-            fix_rating_labels = np.array([ [True] if rating_list[x[0]] >=3 else [False] for x in stim_fix])
+            # Binarizing labels in case of classification
+            fix_rating_labels = np.array([ [True] if rating_list[x[0]] >=3 else [False] for x in stim_fix]) 
             sac_rating_labels = np.array([ [True] if rating_list[x[0]] >=3 else [False] for x in stim_sac])
 
         curr_subject_id_f = np.ones([fix_data.shape[0], 1]) * subject_id
@@ -314,6 +315,7 @@ def get_results_kfold(X_fix, ids_f, yf, stim_f, X_sac, ids_s, ys, stim_s, k, mod
         
         cv_metrics.append(current_fold_metrics)
 
+    #Returning means and stds of the metrics
     if regression:
         rmses = [fold['rmse'] for fold in cv_metrics]
         maes = [fold['mae'] for fold in cv_metrics]
@@ -349,14 +351,14 @@ for regression, models in  [ (True, models_regression), (False, models_classific
         map_ss_rating[(int(x[0]), int(x[2]))] = x[1]
 
     X_fix = data_fix[:, 3:]
-    ids_f = data_fix[:, 0]
+    ids_f = data_fix[:, 0] # Subjects' ids (fixations)
+    yf = data_fix[:, 1] # Labels (fixations)
+    stim_f = data_fix[:, 2] # Stimulus' ids (fixations)
 
-    yf = data_fix[:, 1]
-    stim_f = data_fix[:, 2] # ids degli stimoli delle fissazioni
     X_sac = data_sac[:, 3:]
-    ids_s = data_sac[:, 0]
-    ys = data_sac[:, 1]
-    stim_s = data_sac[:, 2] # ids degli stimoli delle saccadi
+    ids_s = data_sac[:, 0] # Subjects' ids (saccades)
+    ys = data_sac[:, 1] # Labels (saccades)
+    stim_s = data_sac[:, 2] # Stimulus' ids (saccades)
 
     print('Standard Deviation of labels', np.std(list(yf) + list(ys)) )
 

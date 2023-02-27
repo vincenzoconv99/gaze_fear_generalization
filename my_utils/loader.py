@@ -6,6 +6,11 @@ from zipfile import ZipFile
 import pandas as pd
 from my_utils.gaze import dva2pixels
 
+def sorted_nicely(l):
+    convert = lambda text: int(text) if text.isdigit() else text
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)] 
+    return sorted(l, key = alphanum_key)
+
 def load_event_features(file):
     features = np.load(file, allow_pickle=True)
     n_ex = len(features)
@@ -43,7 +48,8 @@ def load_event_features(file):
 
 def load_reutter(path):
     scanpath = []
-    paths = listdir(path)
+    paths = sorted_nicely(listdir(path))
+    print(paths)
 
     for subject in paths:
         sub_scan = load_reutter_sub(path + subject)
